@@ -1,3 +1,5 @@
+[![Python package](https://github.com/dnlbauer/django-signposting/actions/workflows/python-package.yml/badge.svg)](https://github.com/dnlbauer/django-signposting/actions/workflows/python-package.yml)
+
 # FAIR signposting for Django
 
 `django_signposting` is a Django middleware library that facilitates the addition of
