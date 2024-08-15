@@ -1,12 +1,5 @@
 from django.http import HttpResponse
-from django.conf import settings
 from django_signposting.utils import add_signposts
-import pytest
-
-
-@pytest.fixture(scope="module", autouse=True)
-def configure_django_settings():
-    settings.configure()
 
 
 def test_add_signpost():

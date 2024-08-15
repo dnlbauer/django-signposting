@@ -1,12 +1,5 @@
-from django.http import HttpResponse, HttpRequest
-from django.conf import settings
+from django.http import HttpResponse
 from django_signposting.middleware import SignpostingMiddleware
-import pytest
-
-
-@pytest.fixture(scope="module", autouse=True)
-def configure_django_settings():
-    settings.configure()
 
 
 def test_middleware_no_signposting():
