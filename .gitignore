@@ -3,3 +3,4 @@ django_signposting.egg-info/
 dist
 .idea
 build
+__pycache__

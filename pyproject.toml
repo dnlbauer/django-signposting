@@ -12,5 +12,14 @@ version = "0.0.1"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "Django>=3.0"
+    "Django>=3.0",
 ]
+[dev-dependencies]
+test = [
+    "pytest",
+]
+
+[pytest]
+minversion = 6.0
+addopts = "-ra -q"
+testpaths = ["tests"]
