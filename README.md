@@ -39,7 +39,7 @@ Here's how you can use it:
 
 ```python
 from django.http import HttpResponse
-from django_signposting.util import add_signposts
+from django_signposting.utils import add_signposts
 
 def my_view(request):
     response = HttpResponse("Hello, world!")
