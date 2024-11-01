@@ -63,3 +63,15 @@ def test_middleware_ignore_error_responses():
     middleware = SignpostingMiddleware(lambda request: response)
     response = middleware(None)
     assert "Link" not in response.headers
+
+
+def test_middleware_type_link():
+    response = HttpResponse()
+    response.status_code = 200
+    response._signposts = [
+        Signpost(LinkRel.type, "http://schema.org/Dataset")
+    ]
+
+    middleware = SignpostingMiddleware(lambda request: response)
+    response = middleware(None)
+    assert response.headers["Link"] == '<http://schema.org/Dataset> ; rel="type"'
