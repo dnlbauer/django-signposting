@@ -61,7 +61,7 @@ def my_view(request):
 ### 3. Signposts are formatted and added as Link headers by the middleware:
 
 ```bash
-curl -I https://example.com
+curl -I http://localhost:8000
 HTTP/2 200 
 ...
 link: <https://schema.org/Dataset> ; rel="type" ,
