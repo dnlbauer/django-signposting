@@ -7,6 +7,8 @@ FAIR signposting headers to HTTP responses.
 This middleware helps in making your data more FAIR (Findable, accessible, interoperable, reuseable) by
 embedding signposting headers in responses, guiding clients to relevant resources linked to the response content.
 
+Based on the [Signposting](https://github.com/stain/signposting) library.
+
 ## Features
 - Automatically adds signposting headers to HTTP responses.
 - Supports multiple relation types with optional media type specification.
