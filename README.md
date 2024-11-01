@@ -69,6 +69,12 @@ link: <https://schema.org/Dataset> ; rel="type" ,
       <https://example.com/download.zip> ; rel="item" ; type="application/zip"
 ```
 
+### TODO
+
+- [ ] Automatically generate signposts from present JSON+LD.
+- [ ] Option to add signposts in HTML via <link> elements.
+
+
 ## License
 
 Licensed under the MIT License.
