@@ -40,37 +40,18 @@ Here's how you can use it:
 ```python
 from django.http import HttpResponse
 from django_signposting.utils import add_signposts
+from signposting import Signpost, LinkRel
 
 def my_view(request):
     response = HttpResponse("Hello, world!")
     
     # Add signpostings as string
-    add_signposts(response,
-                  type="https://schema.org/Dataset",
-                  author="https://orcid.org/0000-0001-9447-460X")
-
-    return response
-```
-
-Multiple links with the same link type can be added as lists and the content type of a link
-can be defined by using tuples:
-
-```python
-
-from django.http import HttpResponse
-from django_signposting.util import add_signposts
-
-def my_view(request):
-    response = HttpResponse("Hello, world!")
-
-    # Add signpostings as string
-    add_signposts(response,
-                  type="https://schema.org/Dataset",
-                  author="https://orcid.org/0000-0001-9447-460X",
-                  item=[
-                      ("https://example.com/image.png", "image/png"),
-                      ("https://example.com/download.zip", "application/zip")
-                  ])
+    add_signposts(
+        response,
+        Signpost(LinkRel.type, "https://schema.org/Dataset"),
+        Signpost(LinkRel.author, "https://orcid.org/0000-0001-9447-460X")
+        Signpost(LinkRel.item, "https://example.com/download.zip", "application/zip")
+    )
 
     return response
 ```
@@ -83,7 +64,7 @@ HTTP/2 200
 ...
 link: <https://schema.org/Dataset> ; rel="type" ,
       <https://orcid.org/0000-0001-9447-460X> ; rel="author" ,
-      <https://example.com/image.png> ; rel="item" ; type="application/json+ld"
+      <https://example.com/download.zip> ; rel="item" ; type="application/zip"
 ```
 
 ## License
