@@ -1,5 +1,6 @@
 from typing import Callable
 from django.http import HttpRequest, HttpResponse
+from signposting import Signpost
 
 
 class SignpostingMiddleware:
@@ -21,20 +22,18 @@ class SignpostingMiddleware:
 
         return response
 
-    def _add_signposts(self, response: HttpResponse, typed_links: dict[str, list[str|tuple[str, str]]]):
+    def _add_signposts(self, response: HttpResponse, signposts: list[Signpost]):
         """ Adds signposting headers to the respones.
         params:
           response - the response object
-          typed_links - a map of relation types to a list of corresponding links. Each link can be a link or a tuple of link and media type.
+          signposts - a list of Signposts
         """
+
         link_snippets = []
-        for relation_type in typed_links.keys():
-            links = typed_links.get(relation_type, [])
-            for link in links:
-                if isinstance(link, tuple) and len(link) > 1:
-                    link_snippets.append(f'<{link[0]}> ; rel="{relation_type}" ; type="{link[1]}"')
-                else:
-                    link_snippets.append(f'<{link}> ; rel="{relation_type}"')
+        for signpost in signposts:
+            link_snippets.append(f'<{signpost.target}> ; rel="{signpost.rel}"')
+            if signpost.type:
+                link_snippets[-1] += f' ; type="{signpost.type}"'
 
         response["Link"] = " , ".join(link_snippets)
 

@@ -1,6 +1,7 @@
+from re import A
 from django.http import HttpResponse
 from django_signposting.middleware import SignpostingMiddleware
-
+from signposting import LinkRel, Signpost
 
 def test_middleware_no_signposting():
     response = HttpResponse()
@@ -14,7 +15,9 @@ def test_middleware_no_signposting():
 def test_middleware_signposting():
     response = HttpResponse()
     response.status_code = 200
-    response._signposts = {"author": ["http://example.com"]}
+    response._signposts = [
+        Signpost(LinkRel.author, "http://example.com")
+    ]
 
     middleware = SignpostingMiddleware(lambda request: response)
     response = middleware(None)
@@ -24,15 +27,11 @@ def test_middleware_signposting():
 def test_middleware_multiple_signposts():
     response = HttpResponse()
     response.status_code = 200
-    response._signposts = {
-        "author": [
-            "http://example.com",
-            "http://example2.com"
-        ],
-        "cite-as": [
-            "http://example3.com"
-        ]
-    }
+    response._signposts = [
+        Signpost(LinkRel.author, "http://example.com"),
+        Signpost(LinkRel.author, "http://example2.com"),
+        Signpost(LinkRel.cite_as, "http://example3.com"),
+    ]
 
     middleware = SignpostingMiddleware(lambda request: response)
     response = middleware(None)
@@ -45,23 +44,21 @@ def test_middleware_multiple_signposts():
 def test_middleware_signpost_with_content_type():
     response = HttpResponse()
     response.status_code = 200
-    response._signposts = {
-        "item": [
-            ("http://example.com", "test/json"),
-        ]
-    }
+    response._signposts = [
+        Signpost(LinkRel.item, "http://example.com", "text/json")
+    ]
 
     middleware = SignpostingMiddleware(lambda request: response)
     response = middleware(None)
-    assert response.headers["Link"] == '<http://example.com> ; rel="item" ; type="test/json"'
+    assert response.headers["Link"] == '<http://example.com> ; rel="item" ; type="text/json"'
 
 
 def test_middleware_ignore_error_responses():
     response = HttpResponse()
     response.status_code = 400
-    response._signposts = {
-        "author": ["https://example.com"]
-    }
+    response._signposts = [
+        Signpost(LinkRel.author, "http://example.com")
+    ]
 
     middleware = SignpostingMiddleware(lambda request: response)
     response = middleware(None)
