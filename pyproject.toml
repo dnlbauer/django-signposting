@@ -7,7 +7,7 @@ name = "django_signposting"
 authors = [
     {name = "Daniel Bauer", email = "github@dbauer.me"}
 ]
-description = "Add FAIR signpostings to response headers"
+description = "Add FAIR signpostings to response headers in Django"
 version = "0.10.0"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -15,6 +15,7 @@ dependencies = [
     "Django>=3.0",
     "signposting>=0.9.9",
 ]
+license = {file= "LICENSE"}
 
 [project.urls]
 Homepage = "https://github.com/dnlbauer/django-signposting"
