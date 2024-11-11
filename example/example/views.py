@@ -7,25 +7,12 @@ from django_signposting.utils import add_signposts
 
 from signposting import Signpost, LinkRel
 
-<<<<<<< HEAD
 
-def my_view(request):
-    response = HttpResponse("Hello, world!")
-
-    # Add signpostings as string
-    add_signposts(
-        response,
-        Signpost(LinkRel.type, "http://schema.org/Dataset"),
-        Signpost(LinkRel.author, "https://orcid.org/0000-0001-9447-460X")
-    )
-
-    return response
-=======
 class SimpleView(View):
 
     def get(self, request):
         response = HttpResponse("Hello, world!")
-        
+
         # Add signpostings as string
         add_signposts(
             response,
@@ -81,4 +68,3 @@ class JsonLdView(JsonLdContextMixin, View):
 
     def get(self, request):
         return render(request, "jsonld.html", context={"sd": self.sd})
->>>>>>> d2b43d7 (use rdflib to extract signposts from jsonld)
