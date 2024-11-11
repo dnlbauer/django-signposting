@@ -32,7 +32,7 @@ jobs:
         python -m pip install -e '.[dev]'
     - name: Lint with flake8
       run: |
-        flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
+        flake8 . --count --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
         pytest

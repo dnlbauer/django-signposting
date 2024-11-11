@@ -19,5 +19,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.my_view),
+    path("", views.SimpleView.as_view()),
+    path("jsonld", views.JsonLdView.as_view()),
 ]

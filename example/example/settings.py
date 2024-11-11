@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_json_ld',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_signposting.middleware.SignpostingMiddleware',
+    'django_signposting.middleware.JsonLdSignpostingParserMiddleware',
 ]
 
 ROOT_URLCONF = 'example.urls'
@@ -55,7 +57,9 @@ ROOT_URLCONF = 'example.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'example/templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

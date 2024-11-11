@@ -1,6 +1,6 @@
 [![Python package](https://github.com/dnlbauer/django-signposting/actions/workflows/python-package.yml/badge.svg)](https://github.com/dnlbauer/django-signposting/actions/workflows/python-package.yml)
 
-# FAIR signposting for Django
+# FAIR signposting middleware for Django
 
 `django_signposting` is a Django middleware library that facilitates the addition of
 FAIR signposting headers to HTTP responses.
@@ -11,6 +11,7 @@ Based on the [Signposting](https://github.com/stain/signposting) library.
 
 ## Features
 - Automatically adds signposting headers to HTTP responses.
+- Signposts can be added manually or automatically be parsed from JSON-LD/schema.org
 - Supports multiple relation types with optional media type specification.
 - Easily integrable with existing Django applications.
 
@@ -22,9 +23,30 @@ pip install django_signposting
 
 ## Usage
 
-### 1. Add Middleware
+### Automatic parsing of JSON-LD
 
-Add the middleware to your Django project's `MIDDLEWARE` setting in `settings.py`:
+To enable automatic parsing of JSON-LD, add the following middleware classes to your Django project's MIDDLEWARE setting in settings.py:
+
+```python
+MIDDLEWARE = [
+    ...,
+    'django_signposting.middleware.SignpostingMiddleware',
+    'django_signposting.middleware.JsonLdSignpostingParserMiddleware',
+    ...,
+]
+```
+
+This setup allows django_signposting to extract JSON-LD embedded in HTML `<script type="application/ld+json">` tags
+and add the corresponding signposting headers.
+It’s compatible with tools that provide JSON-LD, such as [django-json-ld](https://pypi.org/project/django-json-ld/).
+
+> Note: The middleware order is important! Place `SignpostingMiddleware` before `JsonLdSignpostingParserMiddleware` to ensure proper extraction and processing of JSON-LD content.
+
+### Manual signposting
+
+For cases where JSON-LD is not embedded, or you want to specify headers manually, you can use the `add_signposts` utility.
+
+1. **Add Middleware**: Add the `SignpostingMiddleware` to your Django project's `MIDDLEWARE` setting in `settings.py`:
 
 ```python
 MIDDLEWARE = [
@@ -34,10 +56,7 @@ MIDDLEWARE = [
 ]
 ```
 
-### 2. Add Signposts to your Views
-
-You can add signposting headers in your Django views using the provided `add_signposts` utility function.
-Here's how you can use it:
+2. **Add Signposts to your Views:** Use the `add_signposts` utility function:
 
 ```python
 from django.http import HttpResponse
@@ -58,7 +77,7 @@ def my_view(request):
     return response
 ```
 
-### 3. Signposts are formatted and added as Link headers by the middleware:
+## Signposts are formatted and added as Link headers by the middleware
 
 ```bash
 curl -I http://localhost:8000
@@ -69,9 +88,8 @@ link: <https://schema.org/Dataset> ; rel="type" ,
       <https://example.com/download.zip> ; rel="item" ; type="application/zip"
 ```
 
-### TODO
+## TODO
 
-- [ ] Automatically generate signposts from present JSON+LD.
 - [ ] Option to add signposts in HTML via <link> elements.
 
 

@@ -12,8 +12,10 @@ version = "0.10.0"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "Django>=3.0",
+    "beautifulsoup4>=4.12.3",
+    "django>=3.0",
     "signposting>=0.9.9",
+    "rdflib>=7.1.1",
 ]
 license = {file= "LICENSE"}
 
