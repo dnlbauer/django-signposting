@@ -13,5 +13,5 @@ def add_signposts(response: HttpResponse, *args: Signpost):
         response._signposts = []
 
     for signpost in args:
-        if not signpost in response._signposts:
+        if signpost not in response._signposts:
             response._signposts.append(signpost)

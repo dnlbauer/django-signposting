@@ -36,4 +36,3 @@ class SignpostingMiddleware:
                 link_snippets[-1] += f' ; type="{signpost.type}"'
 
         response["Link"] = " , ".join(link_snippets)
-

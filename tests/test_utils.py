@@ -5,7 +5,7 @@ from signposting import Signpost, LinkRel
 
 def test_add_signpost():
     response = HttpResponse()
-    add_signposts(response, Signpost(LinkRel.item,"http://example.com"))
+    add_signposts(response, Signpost(LinkRel.item, "http://example.com"))
 
     assert len(response._signposts) == 1
 
@@ -17,7 +17,6 @@ def test_add_multiple_signposts():
                   Signpost(LinkRel.author, "https://example2.com"),
                   Signpost(LinkRel.author, "https://example3.com"),
                   )
-
 
     assert len(response._signposts) == 3
 

@@ -1,7 +1,7 @@
-from re import A
 from django.http import HttpResponse
 from django_signposting.middleware import SignpostingMiddleware
 from signposting import LinkRel, Signpost
+
 
 def test_middleware_no_signposting():
     response = HttpResponse()
