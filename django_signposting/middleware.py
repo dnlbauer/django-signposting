@@ -55,7 +55,7 @@ class JsonLdSignpostingParserMiddleware(MiddlewareMixin):
         return bool(url_pattern.match(url))
 
     def select_url(self, elements: tuple[str, ...]) -> str | None:
-        for elem in elements:
+        for elem in elements[::-1]:
             if self.is_url(str(elem)):
                 return str(elem)
         return None
@@ -82,7 +82,7 @@ class JsonLdSignpostingParserMiddleware(MiddlewareMixin):
             if author:
                 signposts.append(Signpost(LinkRel.author, author))
 
-        license = next(iter(sparql.license_query(g, rootElement)), None)
+        license = next(iter(sparql.license_query(g, rootElement)), [])
         license = self.select_url(license)
         if license:
             signposts.append(Signpost(LinkRel.license, license))
@@ -106,7 +106,6 @@ class JsonLdSignpostingParserMiddleware(MiddlewareMixin):
             item = self.select_url(item[:-1])
             if item:
                 signposts.append(Signpost(LinkRel.item, item, item_media_type))
-
         return signposts
 
     def process_response(

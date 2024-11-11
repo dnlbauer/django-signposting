@@ -97,7 +97,7 @@ def sameas_query(g: Graph, rootElement: str):
         """
 PREFIX schema: <http://schema.org/>
 
-SELECT ?element_id ?contentUrl ?identifier ?url ?encoding
+SELECT ?element_id ?identifier ?url ?contentUrl ?encoding
 WHERE {
     ?rootElement schema:sameAs ?element .
 
@@ -117,11 +117,11 @@ def item_query(g: Graph, rootElement: str):
         """
 PREFIX schema: <http://schema.org/>
 
-SELECT ?element_id ?contentUrl ?identifier ?url ?encoding
+SELECT ?element_id ?identifier ?url ?contentUrl ?encoding
 WHERE {
     ?rootElement schema:hasPart ?element .
     #VALUES ?element_type { schema:MediaObject schema:Dataset }
-    ?element a ?element_type .
+    #?element a ?element_type .
 
     BIND(?element AS ?element_id)  # Get the @id of the element
     OPTIONAL { ?element schema:contentUrl ?contentUrl }
