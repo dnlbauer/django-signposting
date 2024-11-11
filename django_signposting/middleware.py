@@ -120,6 +120,7 @@ class JsonLdSignpostingParserMiddleware(MiddlewareMixin):
                 try:
                     jsonld = json.loads(script.string)
                     signposts = self._jsonld_to_signposts(jsonld)
+
                     response._signposts = signposts
                 except json.JSONDecodeError as e:
                     print(e)

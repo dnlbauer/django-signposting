@@ -1,5 +1,4 @@
 import json
-from math import exp
 from django.http import HttpRequest, HttpResponse
 
 from django_signposting.middleware import JsonLdSignpostingParserMiddleware
@@ -12,7 +11,7 @@ def jsonld_test_runner(jsonld, expected_signposts):
     <script type="application/ld+json">{json.dumps(jsonld)}</script>
     </head>
     <body></body>
-    </html>    
+    </html>
     """)
     response.status_code = 200
 

@@ -15,7 +15,6 @@ WHERE {
 
   # No incoming edges for ?rootElement
   FILTER NOT EXISTS { ?s ?p ?rootElement }
-
 }
 LIMIT 1
 """)
@@ -49,6 +48,7 @@ WHERE {
     OPTIONAL { ?author schema:url ?url }
 }
 LIMIT 1
+
 """,
         initBindings={"rootElement": rootElement},
     )
@@ -87,6 +87,7 @@ WHERE {
     OPTIONAL { ?element schema:url ?url }
 }
 LIMIT 1
+
 """,
         initBindings={"rootElement": rootElement},
     )
@@ -97,7 +98,7 @@ def sameas_query(g: Graph, rootElement: str):
         """
 PREFIX schema: <http://schema.org/>
 
-SELECT ?element_id ?identifier ?url ?contentUrl ?encoding
+SELECT ?element_id ?contentUrl ?identifier ?url ?encoding
 WHERE {
     ?rootElement schema:sameAs ?element .
 
@@ -129,6 +130,7 @@ WHERE {
     OPTIONAL { ?element schema:url ?url }
     OPTIONAL { ?element schema:encodingFormat ?encoding }
 }
+
 """,
         initBindings={"rootElement": rootElement},
     )
