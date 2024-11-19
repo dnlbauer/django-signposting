@@ -18,7 +18,7 @@ Based on the [Signposting](https://github.com/stain/signposting) library.
 ## Installation
 
 ```bash
-pip install django_signposting
+pip install django-signposting
 ```
 
 ## Usage
