@@ -91,6 +91,8 @@ link: <https://schema.org/Dataset> ; rel="type" ,
 ## TODO
 
 - [ ] Option to add signposts in HTML via <link> elements.
+- [ ] Add support for link sets
+- [ ] Add support for specifying profile extension attribute
 
 
 ## License
