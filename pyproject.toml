@@ -8,7 +8,7 @@ authors = [
     {name = "Daniel Bauer", email = "github@dbauer.me"}
 ]
 description = "Add FAIR signpostings to response headers in Django"
-version = "0.10.1"
+version = "0.10.2"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

@@ -218,3 +218,53 @@ def test_jsonld_signposting_multiple_types():
             Signpost(LinkRel.author, "http://example.com/author"),
         ],
     )
+
+
+def test_jsonld_signposting_rocrate():
+    jsonld_test_runner(
+        {
+            "@context": "http://w3id.org/ro/crate/1.1/context",
+            "@graph": [
+                {
+                    "@type": "CreativeWork",
+                    "@id": "ro-crate-metadata.json",
+                    "conformsTo": {"@id": "http://w3id.org/ro/crate/1.1"},
+                    "about": {"@id": "http://example.com/myCrate"}
+                },
+                {
+                    "@type": "Dataset",
+                    "@id": "http://example.com/myCrate",
+                    "author": {"@id": "http://example.com/author"},
+                    "datePublished": "2024",
+                    "name": "Test crate",
+                    "description": "This is a detached test create",
+                    "license": {"@id": "http://example.com/license"},
+                    "hasPart": [
+                        {"@id": "http://example.com/file"}
+                    ]
+                },
+                {
+                    "@id": "http://example.com/author",
+                    "@type": "Person",
+                    "name": "Daniel Bauer"
+                },
+                {
+                    "@id": "http://example.com/license",
+                    "@type": "CreativeWork",
+                    "name": "Test License"
+                },
+                {
+                    "@id": "http://example.com/file",
+                    "@type": "File",
+                    "contentUrl": "http://example.com/image1.jpg",
+                    "encodingFormat": "image/jpeg"
+                }
+            ]
+        },
+        [
+            Signpost(LinkRel.type, "http://schema.org/Dataset"),
+            Signpost(LinkRel.author, "http://example.com/author"),
+            Signpost(LinkRel.license, "http://example.com/license"),
+            Signpost(LinkRel.item, "http://example.com/image1.jpg", "image/jpeg"),
+        ],
+    )

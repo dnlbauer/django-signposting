@@ -21,4 +21,5 @@ from . import views
 urlpatterns = [
     path("", views.SimpleView.as_view()),
     path("jsonld", views.JsonLdView.as_view()),
+    path("ro-crate", views.rocrate.as_view()),
 ]
