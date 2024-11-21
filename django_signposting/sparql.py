@@ -14,7 +14,21 @@ WHERE {
   (schema:license | schema:author | schema:creator ) ?value .
 
   # No incoming edges for ?rootElement
-  FILTER NOT EXISTS { ?s ?p ?rootElement }
+  FILTER NOT EXISTS {
+    ?incoming ?p ?rootElement .
+
+    # also allow incoming edges that link entities BACK to the dataset
+    FILTER(?p != schema:isPartOf)
+    FILTER(?p != schema:mainEntityOfPage)
+    FILTER(?p != schema:recordedIn)
+    FILTER(?p != schema:exampleOfWork)
+    FILTER(?p != schema:includedInDataCatalogue)
+    FILTER(?p != schema:subjectOf)
+    FILTER(?p != schema:dataset)
+
+    # allow incoming edges from ro-crate-metadata.json
+    FILTER(CONTAINS(?incoming, "ro-crate-metadata.json")) .
+  }
 }
 LIMIT 1
 """)
