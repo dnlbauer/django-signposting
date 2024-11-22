@@ -8,6 +8,8 @@ from django_signposting.utils import add_signposts, jsonld_to_signposts
 
 
 class SimpleView(View):
+    """ A simple view that adds signposting headers to the response."""
+
     def get(self, request):
         response = HttpResponse("Hello, world!")
 
@@ -22,6 +24,9 @@ class SimpleView(View):
 
 
 class JsonLdView(JsonLdContextMixin, View):
+    """ A view that automatically adds signposting headers to the response based on
+    the JSON-LD metadata in the response."""
+
     sd = {
         "@context": "https://schema.org",
         "@type": ["WebSite", "Dataset"],
@@ -68,6 +73,8 @@ class JsonLdView(JsonLdContextMixin, View):
 
 
 class rocrate(JsonLdContextMixin, View):
+    """ A view that adds signposting headers from the metadata of a detached RO-Crate."""
+
     def get(self, request):
         import json
         import os
