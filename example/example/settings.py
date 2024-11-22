@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_signposting.middleware.SignpostingMiddleware',
+    # 'django_signposting.middleware.HtmlSignpostingMiddleware',
     'django_signposting.middleware.JsonLdSignpostingParserMiddleware',
 ]
 
