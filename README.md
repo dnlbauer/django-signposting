@@ -39,6 +39,7 @@ MIDDLEWARE = [
 This setup allows django_signposting to extract JSON-LD embedded in HTML `<script type="application/ld+json">` tags
 and add the corresponding signposting headers.
 It’s compatible with tools that provide JSON-LD, such as [django-json-ld](https://pypi.org/project/django-json-ld/).
+It can also extract signposts from rich metadata descriptions of datasets in [RO-Crate](https://www.researchobject.org/ro-crate) format (see [example views](./example/example/views.py))
 
 > Note: The middleware order is important! Place `SignpostingMiddleware` before `JsonLdSignpostingParserMiddleware` to ensure proper extraction and processing of JSON-LD content.
 
