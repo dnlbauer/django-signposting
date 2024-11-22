@@ -15,6 +15,17 @@ Based on the [Signposting](https://github.com/stain/signposting) library.
 - Supports multiple relation types with optional media type specification.
 - Easily integrable with existing Django applications.
 
+### Signposts are formatted and added as Link headers
+
+```bash
+curl -I http://localhost:8000
+HTTP/2 200 
+...
+link: <https://schema.org/Dataset> ; rel="type" ,
+      <https://orcid.org/0000-0001-9447-460X> ; rel="author" ,
+      <https://example.com/download.zip> ; rel="item" ; type="application/zip"
+```
+
 ## Installation
 
 ```bash
@@ -26,7 +37,22 @@ pip install django-signposting
 ### Automatic parsing of JSON-LD
 
 The library can automatically add signposts to web pages that already make
-metadata available via JSON-LD in HTML via `<script type="application/ld+json">` tags. To enable automatic parsing of JSON-LD, add the following middleware classes to your Django project's MIDDLEWARE setting in settings.py:
+metadata available via JSON-LD in HTML via `<script type="application/ld+json">` tags, i.e.:
+
+```HTML
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": ["WebSite", "Dataset"], "author": {"@type": "Person", "name": "Daniel Bauer", "url": "https://orcid.org/0000-0001-9447-460X"}, "description": "A dataset of things.", "hasPart": [{"@type": "ImageObject", "encodingFormat": "image/png", "url": "http://example.com/image.png"}, {"@type": "ImageObject", "encodingFormat": "image/png", "url": "http://example.com/image2.png"}], "license": {"@type": "CreativeWork", "name": "CC BY 4.0", "url": "https://creativecommons.org/licenses/by/4.0/"}, "name": "My Dataset", "sameAs": [{"@type": "MediaObject", "contentUrl": "https://example.com/download.zip", "encodingFormat": "application/zip"}, {"@type": "MediaObject", "contentUrl": "https://example.com/metadata.json"}], "url": "https://example.com"}</script>
+</head>
+<body>
+    <p>Hello, world!</p>
+</body>
+</html>
+```
+
+To enable automatic parsing of JSON-LD, add the following middleware classes to your Django project's MIDDLEWARE setting in settings.py:
 
 ```python
 MIDDLEWARE = [
@@ -37,36 +63,20 @@ MIDDLEWARE = [
 ]
 ```
 
-This extracts supported properties from JSON-LD and adds the corresponding signposting headers to the `HttpResponse`.
+This extracts supported metadatad properties from JSON-LD and adds the corresponding signposting headers to the `HttpResponse` automatically.
 
 Automatic parsing is compatible with extensions that provide JSON-LD as part of a web page, such as [django-json-ld](https://pypi.org/project/django-json-ld/).
-It can also extract signposts from rich metadata descriptions of datasets such as [RO-Crate](https://www.researchobject.org/ro-crate) format (see [example views](./example/example/views.py)).
+It can also extract signposts from rich metadata descriptions of datasets such as detached [RO-Crates](https://www.researchobject.org/ro-crate) (see [example views](./example/example/views.py)).
 
 > Note: The middleware order is important! Place `SignpostingMiddleware` before `JsonLdSignpostingParserMiddleware` to ensure proper extraction and processing of JSON-LD content.
 
-### Manual parsing of JSON-LD
-
-If you have metadata in JSON-LD available, but it is not rendered as part of the response, you can still parse it manually to create signposting links:
-
-```python
-from django.http import HttpResponse
-from django_signposting.utils import add_signposts, jsonld_to_signposts
-
-response = HttpResponse("Hello World")
-json_ld = {
-    "@context": "http://schema.org/",
-    "@graph": [
-        ...
-    ]
-}
-signposts = jsonld_to_signposts(json_ld)
-add_signposts(response, **signposts)
-```
-
+## Alternative approaches
 
 ### Manual signposting
 
-For cases where JSON-LD is not embedded, or you want to specify headers manually, you can use the `add_signposts` utility.
+For cases where there is no embedded JSON-LD, or you want to specify additional headers manually, you can use the `add_signposts` utility function.
+This still requires the `SignpostingMiddleware` to inject the links into
+the response:
 
 1. **Add Middleware**: Add the `SignpostingMiddleware` to your Django project's `MIDDLEWARE` setting in `settings.py`:
 
@@ -99,15 +109,23 @@ def my_view(request):
     return response
 ```
 
-## Signposts are formatted and added as Link headers by the middleware
+### Manual parsing of JSON-LD
 
-```bash
-curl -I http://localhost:8000
-HTTP/2 200 
-...
-link: <https://schema.org/Dataset> ; rel="type" ,
-      <https://orcid.org/0000-0001-9447-460X> ; rel="author" ,
-      <https://example.com/download.zip> ; rel="item" ; type="application/zip"
+If you have metadata in JSON-LD available, but it is not rendered as part of the response, you can still parse it and add the signposting links manually:
+
+```python
+from django.http import HttpResponse
+from django_signposting.utils import add_signposts, jsonld_to_signposts
+
+response = HttpResponse("Hello World")
+json_ld = {
+    "@context": "http://schema.org/",
+    "@graph": [
+        ...
+    ]
+}
+signposts = jsonld_to_signposts(json_ld)
+add_signposts(response, **signposts)
 ```
 
 ## TODO
@@ -115,7 +133,6 @@ link: <https://schema.org/Dataset> ; rel="type" ,
 - [ ] Option to add signposts in HTML via <link> elements.
 - [ ] Add support for link sets
 - [ ] Add support for specifying profile extension attribute
-
 
 ## License
 
