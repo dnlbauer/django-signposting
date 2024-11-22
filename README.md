@@ -25,7 +25,8 @@ pip install django-signposting
 
 ### Automatic parsing of JSON-LD
 
-To enable automatic parsing of JSON-LD, add the following middleware classes to your Django project's MIDDLEWARE setting in settings.py:
+The library can automatically add signposts to web pages that already make
+metadata available via JSON-LD in HTML via `<script type="application/ld+json">` tags. To enable automatic parsing of JSON-LD, add the following middleware classes to your Django project's MIDDLEWARE setting in settings.py:
 
 ```python
 MIDDLEWARE = [
@@ -36,12 +37,32 @@ MIDDLEWARE = [
 ]
 ```
 
-This setup allows django_signposting to extract JSON-LD embedded in HTML `<script type="application/ld+json">` tags
-and add the corresponding signposting headers.
-It’s compatible with tools that provide JSON-LD, such as [django-json-ld](https://pypi.org/project/django-json-ld/).
-It can also extract signposts from rich metadata descriptions of datasets in [RO-Crate](https://www.researchobject.org/ro-crate) format (see [example views](./example/example/views.py))
+This extracts supported properties from JSON-LD and adds the corresponding signposting headers to the `HttpResponse`.
+
+Automatic parsing is compatible with extensions that provide JSON-LD as part of a web page, such as [django-json-ld](https://pypi.org/project/django-json-ld/).
+It can also extract signposts from rich metadata descriptions of datasets such as [RO-Crate](https://www.researchobject.org/ro-crate) format (see [example views](./example/example/views.py)).
 
 > Note: The middleware order is important! Place `SignpostingMiddleware` before `JsonLdSignpostingParserMiddleware` to ensure proper extraction and processing of JSON-LD content.
+
+### Manual parsing of JSON-LD
+
+If you have metadata in JSON-LD available, but it is not rendered as part of the response, you can still parse it manually to create signposting links:
+
+```python
+from django.http import HttpResponse
+from django_signposting.utils import add_signposts, jsonld_to_signposts
+
+response = HttpResponse("Hello World")
+json_ld = {
+    "@context": "http://schema.org/",
+    "@graph": [
+        ...
+    ]
+}
+signposts = jsonld_to_signposts(json_ld)
+add_signposts(response, **signposts)
+```
+
 
 ### Manual signposting
 
