@@ -4,13 +4,26 @@ from django_signposting.middleware import HtmlSignpostingMiddleware
 from signposting import LinkRel, Signpost
 import pytest
 
+def assert_links_exist(response: HttpResponse, signposts: list[Signpost]=None):
+    if signposts is None:
+        signposts = response._signposts
+    
+
+    soup = BeautifulSoup(response.content.decode("utf-8"), "html.parser")
+    for signpost in signposts:
+        links = soup.find_all("link", href=signpost.target, rel=signpost.rel)
+        assert len(links) == 1
+
+    assert len(soup.find_all("link")) == len(signposts)
+
 def test_middleware_no_signposting():
     response = HttpResponse("<html><head></head><body></body></html>")
     response.status_code = 200
 
     middleware = HtmlSignpostingMiddleware(lambda request: response)
     response = middleware(None)
-    assert "link" not in response.content.decode("utf-8")
+    
+    assert_links_exist(response, [])
 
 
 def test_middleware_no_html():
@@ -21,8 +34,8 @@ def test_middleware_no_html():
     ]
 
     middleware = HtmlSignpostingMiddleware(lambda request: response)
-    content = middleware(None).content
-    assert response.content == content
+    middleware(None)
+    assert_links_exist(response, [])
 
 def test_middleware_malformed_html():
     response = HttpResponse("Hello world")
@@ -36,18 +49,6 @@ def test_middleware_malformed_html():
     with pytest.raises(Exception):
         middleware(None)
 
-def test_middleware_signposting():
-    response = HttpResponse("<html><head></head><body></body></html>")
-    response.status_code = 200
-    response._signposts = [
-        Signpost(LinkRel.author, "http://example.com")
-    ]
-
-    middleware = HtmlSignpostingMiddleware(lambda request: response)
-    response = middleware(None)
-    content = response.content.decode("utf-8")
-    assert '<link href="http://example.com" rel="author"/>' in content
-
 def test_middleware_signposting_without_head():
     response = HttpResponse("<html><body></body></html>")
     response.status_code = 200
@@ -56,10 +57,19 @@ def test_middleware_signposting_without_head():
     ]
 
     middleware = HtmlSignpostingMiddleware(lambda request: response)
-    response = middleware(None)
-    content = response.content.decode("utf-8")
-    assert '<link href="http://example.com" rel="author"/>' in content
+    middleware(None)
+    assert_links_exist(response)
 
+def test_middleware_signposting():
+    response = HttpResponse("<html><head></head><body></body></html>")
+    response.status_code = 200
+    response._signposts = [
+        Signpost(LinkRel.author, "http://example.com")
+    ]
+
+    middleware = HtmlSignpostingMiddleware(lambda request: response)
+    middleware(None)
+    assert_links_exist(response)
 
 def test_middleware_multiple_signposts():
     response = HttpResponse("<html><head></head><body></body></html>")
@@ -72,9 +82,7 @@ def test_middleware_multiple_signposts():
 
     middleware = HtmlSignpostingMiddleware(lambda request: response)
     response = middleware(None)
-    content = response.content.decode("utf-8")
-    soup = BeautifulSoup(content, "html.parser")
-    assert len(soup.find_all("link")) == 3
+    assert_links_exist(response)
 
 
 def test_middleware_signpost_with_content_type():
@@ -86,9 +94,7 @@ def test_middleware_signpost_with_content_type():
 
     middleware = HtmlSignpostingMiddleware(lambda request: response)
     response = middleware(None)
-    content = response.content.decode("utf-8")
-    soup = BeautifulSoup(content, "html.parser")
-    assert len(soup.find_all("link")) == 1
+    assert_links_exist(response)
 
 
 def test_middleware_ignore_error_responses():
@@ -100,9 +106,7 @@ def test_middleware_ignore_error_responses():
 
     middleware = HtmlSignpostingMiddleware(lambda request: response)
     response = middleware(None)
-    content = response.content.decode("utf-8")
-    soup = BeautifulSoup(content, "html.parser")
-    assert len(soup.find_all("link")) == 1
+    assert_links_exist(response)
 
 
 def test_middleware_type_link():
@@ -114,7 +118,5 @@ def test_middleware_type_link():
 
     middleware = HtmlSignpostingMiddleware(lambda request: response)
     response = middleware(None)
-    content = response.content.decode("utf-8")
-    soup = BeautifulSoup(content, "html.parser")
-    assert len(soup.find_all("link")) == 1
+    assert_links_exist(response)
 
