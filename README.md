@@ -158,7 +158,6 @@ on the detected signposting metadata and produces output similar to the one show
 
 ## TODO
 
-- [ ] Option to add signposts in HTML via <link> elements.
 - [ ] Add support for link sets
 - [ ] Add support for specifying profile extension attribute
 
