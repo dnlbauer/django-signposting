@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django_signposting.middleware import HtmlSignpostingMiddleware
 from signposting import LinkRel, Signpost
-
+import pytest
 
 def test_middleware_no_signposting():
     response = HttpResponse("<html><head></head><body></body></html>")
@@ -12,6 +12,29 @@ def test_middleware_no_signposting():
     response = middleware(None)
     assert "link" not in response.content.decode("utf-8")
 
+
+def test_middleware_no_html():
+    response = JsonResponse({"hello": "world"})
+    response.status_code = 200
+    response._signpost = [
+        Signpost(LinkRel.author, "http://example.com")
+    ]
+
+    middleware = HtmlSignpostingMiddleware(lambda request: response)
+    content = middleware(None).content
+    assert response.content == content
+
+def test_middleware_malformed_html():
+    response = HttpResponse("Hello world")
+    response.status_code = 200
+    response.content_type = "text/html"
+    response._signposts = [
+        Signpost(LinkRel.author, "http://example.com")
+    ]
+
+    middleware = HtmlSignpostingMiddleware(lambda request: response)
+    with pytest.raises(Exception):
+        middleware(None)
 
 def test_middleware_signposting():
     response = HttpResponse("<html><head></head><body></body></html>")
