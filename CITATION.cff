@@ -1,0 +1,29 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: FAIR signposting middleware for Django
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Daniel
+    family-names: Bauer
+    email: daniel.bauer@senckenberg.de
+    affiliation: Senckenberg Society for Nature Research
+    orcid: 'https://orcid.org/0000-0001-9447-460X'
+abstract: >-
+  django_signposting is a Django middleware library that
+  facilitates the addition of FAIR signposting headers to
+  HTTP responses. This middleware helps in making your data
+  more FAIR (Findable, accessible, interoperable, reuseable)
+  by embedding signposting headers in responses, guiding
+  clients to relevant resources linked to the response
+  content.
+keywords:
+  - django
+  - FAIR
+  - signposting
+  - links
+license: MIT
