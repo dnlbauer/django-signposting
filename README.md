@@ -128,9 +128,36 @@ signposts = jsonld_to_signposts(json_ld)
 add_signposts(response, **signposts)
 ```
 
+### Add signposts as HTML links instead of headers
+
+In cases where you want to include signposting directly in the HTML response rather than as HTTP headers
+(for example because headers are overwritten by a proxy or something else),
+you can use the `HtmlSignpostingMiddleware` instead of `SignpostingMiddleware`.
+
+This middleware automatically adds <link> elements to the HTML <head> section based
+on the detected signposting metadata and produces output similar to the one shown here:
+
+```HTML
+<!DOCTYPE html>
+<html>
+ <head>
+  (...)
+  <link href="http://schema.org/WebSite" rel="type"/>
+  <link href="http://schema.org/Dataset" rel="type"/>
+  <link href="https://orcid.org/0000-0001-9447-460X" rel="author"/>
+  <link href="https://creativecommons.org/licenses/by/4.0/" rel="license"/>
+  <link href="https://example.com" rel="cite-as"/>
+  <link href="https://example.com/download.zip" rel="describedby" type="application/zip"/>
+  <link href="https://example.com/metadata.json" rel="describedby"/>
+  <link href="http://example.com/image.png" rel="item" type="image/png"/>
+  <link href="http://example.com/image2.png" rel="item" type="image/png"/>
+ </head>
+ ...
+</html>
+```
+
 ## TODO
 
-- [ ] Option to add signposts in HTML via <link> elements.
 - [ ] Add support for link sets
 - [ ] Add support for specifying profile extension attribute
 

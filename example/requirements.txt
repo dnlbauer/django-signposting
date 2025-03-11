@@ -2,7 +2,7 @@ asgiref==3.8.1
 beautifulsoup4==4.12.3
 certifi==2024.8.30
 charset-normalizer==3.4.0
-django==5.1.3
+django==5.1.4
 django-json-ld==0.0.5
 django-signposting==0.10.0
 httplink==0.2.0
