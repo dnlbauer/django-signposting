@@ -164,3 +164,7 @@ on the detected signposting metadata and produces output similar to the one show
 ## License
 
 Licensed under the MIT License.
+
+## References
+
+You can cite this library using this DOI: [10.5281/zenodo.15008517](https://doi.org/10.5281/zenodo.15008517).
