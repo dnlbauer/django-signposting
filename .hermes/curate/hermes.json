@@ -1,0 +1,31 @@
+{
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    {
+      "hermes": "https://software-metadata.pub/ns/hermes/"
+    }
+  ],
+  "@type": "SoftwareSourceCode",
+  "author": [
+    {
+      "@id": "https://orcid.org/0000-0001-9447-460X",
+      "@type": "Person",
+      "affiliation": {
+        "@type": "Organization",
+        "legalName": "Senckenberg Society for Nature Research"
+      },
+      "familyName": "Bauer",
+      "givenName": "Daniel",
+      "email": "daniel.bauer@senckenberg.de"
+    }
+  ],
+  "description": "django_signposting is a Django middleware library that facilitates the addition of FAIR signposting headers to HTTP responses. This middleware helps in making your data more FAIR (Findable, accessible, interoperable, reuseable) by embedding signposting headers in responses, guiding clients to relevant resources linked to the response content.",
+  "keywords": [
+    "django",
+    "FAIR",
+    "signposting",
+    "links"
+  ],
+  "license": "https://spdx.org/licenses/MIT",
+  "name": "FAIR signposting middleware for Django"
+}
